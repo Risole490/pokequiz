@@ -17,11 +17,11 @@ const HP = ({ valor }) => {
     )
 }
 
-const TempoRestante = () => {
+const TempoRestante = ({ tempo }) => {
     return (
         <VisualHPContainer>
             <h1>Tempo Restante</h1>
-            <p>10:00</p>
+            <p>{tempo}</p>
         </VisualHPContainer>
     )
 }

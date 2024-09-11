@@ -15,9 +15,15 @@ const BotaoStyled = styled.button`
 `;
 
 
-const Botao = ({ onClick, children, cor, corTexto, corHover }) => {
+const Botao = ({ onClick, children, cor, corTexto, corHover, style }) => {
     return (
-        <BotaoStyled cor={cor} onClick={onClick} corTexto={corTexto} corHover={corHover}>
+        <BotaoStyled 
+            cor={cor} 
+            onClick={onClick} 
+            corTexto={corTexto} 
+            corHover={corHover} 
+            style={style}
+        >
             {children}
         </BotaoStyled>
     )
