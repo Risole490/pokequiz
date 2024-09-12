@@ -8,6 +8,9 @@
 # testing
 /coverage
 
+# Diretório data
+data/
+
 # production
 /build
 
