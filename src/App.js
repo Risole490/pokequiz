@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Header from "./componentes/Header";
 import Quiz from "./componentes/Quiz";
+import './reset.css';
 
 const AppContainer = styled.div`
   width: 100vw;

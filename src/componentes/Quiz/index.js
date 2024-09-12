@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
 
-import { loadNextQuestion } from '../../Validações/funcoesQuiz'; // Importa a função de carregamento de perguntas
+import { loadNextQuestion, resetQuiz } from '../../Validações/funcoesQuiz'; // Importa a função de carregamento de perguntas
 
 
 import { Subtitulo, Titulo } from "../Titulo";
@@ -14,17 +14,17 @@ import { HP, TempoRestante } from '../Visuals';
 const QuizContainer = styled.section`
     width: 600px;
     height: 100vh;
+    background-color: #f5f5f5;
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 1px solid #000;
 `;
 
 const Quiz = () => {
-    const [timer, setTimer] = useState(0);
+    const [timer, setTimer] = useState(5);
     const [isStarted, setIsStarted] = useState(false);
     const [quizData, setQuizData] = useState(null);
-    const [hp, setHP] = useState(100);
+    const [hp, setHp] = useState(100);
     const [tempoTotal, setTempoTotal] = useState(120);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [isAnswerCorrect, setIsAnswerCorrect] = useState(null);
@@ -51,21 +51,29 @@ const Quiz = () => {
             }, 1000);
         } else if (tempoTotal === 0) {
             clearInterval(interval);
-            console.log("Tempo do quiz esgotado!");
             setIsStarted(false);
             setQuizTerminado(true);
         }
         return () => clearInterval(interval);
     }, [isStarted, tempoTotal]);
 
-    const startQuiz = async () => {
-        setTimer(3);
-        setIsStarted(true);
-        setTempoTotal(120);
-        setQuizTerminado(false);
-        setPontuacao(0);
-        await loadNextQuestion().then(setQuizData);
-    };
+    useEffect(() => {
+        if (isStarted && timer === 0) {
+            const fetchQuestion = async () => {
+                const nextQuestion = await loadNextQuestion();
+                setQuizData(nextQuestion);
+            };
+
+            fetchQuestion();
+        }
+    }, [isStarted, timer]);
+
+    useEffect(() => {
+        if (hp <= 0) {
+            setQuizTerminado(true);
+            setIsStarted(false);
+        }
+    }, [hp]);
 
     const handleAnswerClick = (alternativa) => {
         setSelectedAnswer(alternativa);
@@ -75,18 +83,42 @@ const Quiz = () => {
             const isShiny = quizData.tipo === 'pokemon' && quizData.isShiny;
             setPontuacao(prevPontuacao => prevPontuacao + (isShiny ? 3 : 1));
         } else {
-            setHP(prevHP => prevHP - 5);
+            setHp(prevHP => {
+                const newHP = prevHP - 5;
+                if (newHP <= 0) {
+                    setQuizTerminado(true);
+                    setIsStarted(false);
+                }
+                return newHP;
+            });
         }
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
             setSelectedAnswer(null);
             setIsAnswerCorrect(null);
-            loadNextQuestion().then(setQuizData);
+            if (!quizTerminado) {
+                loadNextQuestion().then(setQuizData);
+            }
         }, 1000);
+    
+        return () => clearTimeout(timeout); // Limpa o timeout quando o componente é desmontado
+    };
+
+    const startQuiz = async () => {
+        resetQuiz();
+        setQuizTerminado(false);
+        setPontuacao(0);
+        setHp(100);
+        setSelectedAnswer(null);
+        setIsAnswerCorrect(false);
+        setTempoTotal(125);
+        setIsStarted(true);
+        setTimer(5);
+        await loadNextQuestion().then(setQuizData);
     };
 
     return (
         <QuizContainer>
-            <Titulo tamanho="2rem"> Quiz do React </Titulo>
+            <Titulo tamanho="2rem" color=''> PokéQuiz! </Titulo>
             {!isStarted && !quizTerminado && <Regras />}
             {!isStarted && !quizTerminado && <Botao cor="red" onClick={startQuiz}> Começar </Botao>}
             {isStarted && timer > 0 && <p> O quiz começará em {timer} segundos </p>}
@@ -125,7 +157,7 @@ const Quiz = () => {
             }
             {quizTerminado && (
                 <div>
-                    <Titulo tamanho="2rem"> Tempo Esgotado! </Titulo>
+                    <Titulo tamanho="2rem"> Fim do quiz! </Titulo>
                     <p>Sua pontuação: {pontuacao}</p>
                     <Botao cor="red" onClick={startQuiz}> Jogar Novamente </Botao>
                 </div>

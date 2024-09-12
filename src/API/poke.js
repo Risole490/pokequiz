@@ -46,7 +46,7 @@ async function extraiDadosPokemons() {
         return {
             nome: data.name,
             sprite: isShiny ? data.sprites.other['official-artwork']['front_shiny'] : data.sprites.other['official-artwork']['front_default'],
-            shiny: isShiny ? 'true' : 'false'
+            shiny: isShiny ? true : false
         };
     }));
 

@@ -1,18 +1,22 @@
 import styled from "styled-components";
-import { Titulo } from "../Titulo";
 
 const HeaderContainer = styled.header`
-        background-color: #FFF;
+        background: none;
         display: flex;
         justify-content: center;
-        border: 1px solid #000;
+        align-items: center;
         width: 100vw;
+`
+
+const LogoImage = styled.img`
+        width: 300px;
+        height: auto;
 `
 
 const Header = () => {
     return (
         <HeaderContainer>
-            <Titulo>Meu Banner</Titulo>
+            <LogoImage src={`${process.env.PUBLIC_URL}/Images/LogoPKCON1.png`} alt="Logo" />
         </HeaderContainer>
     )
 }

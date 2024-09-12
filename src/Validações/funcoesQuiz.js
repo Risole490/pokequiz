@@ -2,10 +2,26 @@
 import { embaralharArray } from './utils';
 import { extraiDadosPokemons } from '../API/poke';
 
+let usedQuestions = new Set();
+let usedPokemon = new Set();
+
+export function resetQuiz() {
+    usedQuestions.clear();
+    usedPokemon.clear();
+}
+
 export async function loadNextQuestion() {
     const isPokemonQuestion = Math.random() < 0.5; // 50% de chance de ser uma pergunta de Pokémon
-    if (isPokemonQuestion) {
-        const data = await extraiDadosPokemons(); // Busca os dados dos pokémons
+    const response = await fetch('http://localhost:5000/api/perguntas-gerais');
+    const perguntasGerais = await response.json();
+
+    if (isPokemonQuestion || usedQuestions.size >= perguntasGerais.length) {
+        let data;
+        do {
+            data = await extraiDadosPokemons(); // Busca os dados dos pokémons
+        } while (usedPokemon.has(data.correto.nome));
+        
+        usedPokemon.add(data.correto.nome);
         data.alternativas = embaralharArray(data.alternativas); // Embaralha as alternativas
         return {
             tipo: 'pokemon',
@@ -13,12 +29,15 @@ export async function loadNextQuestion() {
             alternativas: data.alternativas,
             correta: data.correto.nome,
             sprite: data.correto.sprite,
-            isShiny: data.correto.sprite.includes('shiny') // Verifica se é shiny
+            isShiny: data.correto.shiny // Verifica se é shiny
         };
     } else {
-        const response = await fetch('http://localhost:5000/api/perguntas-gerais');
-        const perguntasGerais = await response.json();
-        const perguntaGeral = perguntasGerais[Math.floor(Math.random() * perguntasGerais.length)];
+        let perguntaGeral;
+        do {
+            perguntaGeral = perguntasGerais[Math.floor(Math.random() * perguntasGerais.length)];
+        } while (usedQuestions.has(perguntaGeral.pergunta));
+        
+        usedQuestions.add(perguntaGeral.pergunta);
         perguntaGeral.alternativas = embaralharArray(perguntaGeral.alternativas); // Embaralha as alternativas
         return {
             tipo: 'geral',

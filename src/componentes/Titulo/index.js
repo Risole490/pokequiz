@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Titulo = styled.h1`
-    color: blue;
+    color: ${props => props.cor || "black"};
     font-size: ${props => props.tamanho || "4rem"};
     align-self: ${props => props.alinhamento || "center"};
 `;
