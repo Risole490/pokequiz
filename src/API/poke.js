@@ -14,6 +14,12 @@ async function pega4Pokemons() {
 }
 
 function formataNome(nome) {
+    if (!nome) {
+        console.error('Nome inválido:', nome);
+        return 'Boa sorte';
+    } 
+
+    console.log(nome);
     // Remove hífens e outros caracteres indesejados
     let nomeFormatado = nome.replace(/-/g, ' ').replace(/[^a-zA-Z\s]/g, '');
     // Remove a palavra "standard"
@@ -43,11 +49,16 @@ async function extraiDadosPokemons() {
         const response = await fetch(pokemon.url);
         const data = await response.json();
         const isShiny = chanceShiny();
-        return {
-            nome: data.name,
-            sprite: isShiny ? data.sprites.other['official-artwork']['front_shiny'] : data.sprites.other['official-artwork']['front_default'],
-            shiny: isShiny ? true : false
-        };
+
+        if(data.sprites.other['official-artwork']['front_shiny'] === null || data.sprites.other['official-artwork']['front_default'] === null){
+            return extraiDadosPokemons();
+        } else {
+            return {
+                nome: data.name,
+                sprite: isShiny ? data.sprites.other['official-artwork']['front_shiny'] : data.sprites.other['official-artwork']['front_default'],
+                shiny: isShiny ? true : false
+            };
+        }
     }));
 
     const pokemonCorreto = detalhesPokemons.find(pokemon => pokemon.nome === pokemonEscolhido.name);

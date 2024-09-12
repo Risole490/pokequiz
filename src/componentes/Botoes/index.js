@@ -10,21 +10,27 @@ const BotaoStyled = styled.button`
     cursor: pointer;
     margin: 5px;
     &:hover {
-        background-color: ${props => props.corHover || "orange"};
+        scale: ${props => props.efeitoHover || 1.1};
     }
 `;
 
+const BotaoTexto = styled.p`
+    color: ${props => props.corTexto || "white"};
+    font-weight: ${props => props.negrito || "normal"};
+`;
 
-const Botao = ({ onClick, children, cor, corTexto, corHover, style }) => {
+
+const Botao = ({ onClick, children, cor, efeitoHover, style }) => {
     return (
         <BotaoStyled 
             cor={cor} 
             onClick={onClick} 
-            corTexto={corTexto} 
-            corHover={corHover} 
+            efeitoHover={efeitoHover}
             style={style}
         >
-            {children}
+            <BotaoTexto
+                negrito="bold"
+            >{children}</BotaoTexto>
         </BotaoStyled>
     )
 }

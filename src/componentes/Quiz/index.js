@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled from "styled-components";
 
 import { loadNextQuestion, resetQuiz } from '../../Validações/funcoesQuiz'; // Importa a função de carregamento de perguntas
@@ -9,15 +9,21 @@ import Regras from "../Regras";
 import { Botao } from "../Botoes";
 
 import { QuizIniciadoContainer, QuizElementos } from '../QuizIniciado';
-import { HP, TempoRestante } from '../Visuals';
+import { HP, TempoRestante, MensagemErro } from '../Visuals';
+import { Input } from '../Inputs';
+import Ranking from '../Ranking';
 
 const QuizContainer = styled.section`
+    background: radial-gradient(circle, rgba(0,42,255,1) 0%, rgba(252,70,70,1) 100%);
+    padding: 0px 10px;
     width: 600px;
     height: 100vh;
     background-color: #f5f5f5;
     display: flex;
+    gap: 10px;
     flex-direction: column;
     align-items: center;
+    border-radius: 5px;
 `;
 
 const Quiz = () => {
@@ -30,6 +36,10 @@ const Quiz = () => {
     const [isAnswerCorrect, setIsAnswerCorrect] = useState(null);
     const [pontuacao, setPontuacao] = useState(0);
     const [quizTerminado, setQuizTerminado] = useState(false);
+    const [nome, setNome] = useState('');
+    const [errorMessage, setErrorMessage] = useState(''); // Estado para mensagem de erro
+    const [ranking, setRanking] = useState([]); // Estado para o ranking
+
 
     useEffect(() => { // Função que será executada toda vez que o componente for renderizado
         let interval; // Variável que armazenará o intervalo de tempo
@@ -103,25 +113,73 @@ const Quiz = () => {
         return () => clearTimeout(timeout); // Limpa o timeout quando o componente é desmontado
     };
 
+    const handleBlur = (event) => {
+        setNome(event.target.value);
+    };
+
     const startQuiz = async () => {
+        if (!nome) {
+            setErrorMessage('Por favor, preencha seu nome antes de começar o quiz.');
+            return;
+        }
+        setErrorMessage(''); // Limpa a mensagem de erro se o nome estiver preenchido
         resetQuiz();
         setQuizTerminado(false);
         setPontuacao(0);
         setHp(100);
         setSelectedAnswer(null);
         setIsAnswerCorrect(false);
-        setTempoTotal(125);
+        setTempoTotal(120);
         setIsStarted(true);
         setTimer(5);
         await loadNextQuestion().then(setQuizData);
     };
 
+    const updateRanking = useCallback(async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/update-ranking', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ nome, pontuacao }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao atualizar o ranking');
+            }
+
+            console.log('Ranking atualizado com sucesso');
+
+            // Obter o ranking atualizado
+            const rankingResponse = await fetch('http://localhost:5000/api/ranking');
+            const rankingData = await rankingResponse.json();
+            setRanking(rankingData); // Atualiza o estado do ranking
+
+        } catch (error) {
+            console.error('Erro ao atualizar o ranking', error);
+        }
+    }, [nome, pontuacao]);
+
+    useEffect(() => {
+        if (quizTerminado) {
+            updateRanking();
+        }
+    }, [quizTerminado, updateRanking]);
+
     return (
         <QuizContainer>
-            <Titulo tamanho="2rem" color=''> PokéQuiz! </Titulo>
+            <Titulo 
+                tamanho="2.5rem" 
+                negrito="bold"
+                fundo="#2b2d42"
+                cor="white"
+            > PokéQuiz! </Titulo>
             {!isStarted && !quizTerminado && <Regras />}
-            {!isStarted && !quizTerminado && <Botao cor="red" onClick={startQuiz}> Começar </Botao>}
-            {isStarted && timer > 0 && <p> O quiz começará em {timer} segundos </p>}
+            {!isStarted && !quizTerminado && <Input type="text" placeholder="Digite seu nome" onBlur={handleBlur}/>}
+            {errorMessage && <MensagemErro mensagem={errorMessage} />} {/* Exibe a mensagem de erro */}
+            {!isStarted && !quizTerminado && <Botao cor="#2b2d42" onClick={startQuiz}> Começar </Botao>}
+            {isStarted && timer > 0 && <Subtitulo margem="50px" cor="#fff"> O quiz começará em {timer} segundos </Subtitulo>}
             {isStarted && timer === 0 && quizData && 
                 <QuizIniciadoContainer>
                     <QuizElementos>
@@ -160,6 +218,7 @@ const Quiz = () => {
                     <Titulo tamanho="2rem"> Fim do quiz! </Titulo>
                     <p>Sua pontuação: {pontuacao}</p>
                     <Botao cor="red" onClick={startQuiz}> Jogar Novamente </Botao>
+                    <Ranking ranking={ranking} />
                 </div>
             )}
         </QuizContainer>

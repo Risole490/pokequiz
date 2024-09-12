@@ -4,8 +4,15 @@ const VisualHPContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 10px;
-    background-color: #f5f5f5;
+    padding: ${props => props.padding || "10px"};
+    background-color: ${props => props.backgroundColor || "#ccc"};
+    border-radius: 10px;
+`
+
+const TextoErro = styled.p`
+    color: red;
+    font-weight: bold;
+    font-family: 'Arial', sans-serif;
 `
 
 const HP = ({ valor }) => {
@@ -26,4 +33,12 @@ const TempoRestante = ({ tempo }) => {
     )
 }
 
-export { HP, TempoRestante };
+const MensagemErro = ({ mensagem }) => {
+    return (
+        <VisualHPContainer>
+            <TextoErro>{mensagem}</TextoErro>
+        </VisualHPContainer>
+    )
+}
+
+export { HP, TempoRestante, MensagemErro };
