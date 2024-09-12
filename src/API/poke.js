@@ -32,7 +32,7 @@ function formataNome(nome) {
 }
 
 function chanceShiny() {
-    return Math.random() < 0.9; // 10% de chance de ser shiny
+    return Math.random() < 0.05; // 5% de chance de ser shiny
 }
 
 async function extraiDadosPokemons() {
@@ -46,7 +46,7 @@ async function extraiDadosPokemons() {
         return {
             nome: data.name,
             sprite: isShiny ? data.sprites.other['official-artwork']['front_shiny'] : data.sprites.other['official-artwork']['front_default'],
-            shiny: isShiny ? 'shiny' : 'normal'
+            shiny: isShiny ? 'true' : 'false'
         };
     }));
 
