@@ -6,21 +6,20 @@ import { loadNextQuestion, resetQuiz } from '../../Validações/funcoesQuiz'; //
 
 import { Subtitulo, Titulo } from "../Titulo";
 import Regras from "../Regras";
-import { Botao } from "../Botoes";
+import { Botao, SkipContainer } from "../Botoes";
 
-import { QuizIniciadoContainer, QuizElementos } from '../QuizIniciado';
-import { HP, TempoRestante, MensagemErro } from '../Visuals';
+import { QuizIniciadoContainer, QuizElementos, ImagemQuiz, AlternativasContainer } from '../QuizIniciado';
+import { HP, TempoRestante, MensagemErro, SkipPokeballs } from '../Visuals';
 import { Input } from '../Inputs';
 import Ranking from '../Ranking';
 
 const QuizContainer = styled.section`
     background: radial-gradient(circle, rgba(0,42,255,1) 0%, rgba(252,70,70,1) 100%);
     padding: 0px 10px;
-    width: 600px;
+    width: 700px;
     height: 100vh;
-    background-color: #f5f5f5;
     display: flex;
-    gap: 10px;
+    gap: 0;
     flex-direction: column;
     align-items: center;
     border-radius: 5px;
@@ -39,6 +38,7 @@ const Quiz = () => {
     const [nome, setNome] = useState('');
     const [errorMessage, setErrorMessage] = useState(''); // Estado para mensagem de erro
     const [ranking, setRanking] = useState([]); // Estado para o ranking
+    const [alternativasDesabilitadas, setAlternativasDesabilitadas] = useState(false);
 
 
     useEffect(() => { // Função que será executada toda vez que o componente for renderizado
@@ -86,9 +86,13 @@ const Quiz = () => {
     }, [hp]);
 
     const handleAnswerClick = (alternativa) => {
+        if (alternativasDesabilitadas) return; // Se os botões estiverem desabilitados, não faça nada
+
         setSelectedAnswer(alternativa);
         const isCorrect = alternativa === quizData.correta;
         setIsAnswerCorrect(isCorrect);
+        setAlternativasDesabilitadas(true); // Desabilita os botões após a seleção
+
         if (isCorrect) {
             const isShiny = quizData.tipo === 'pokemon' && quizData.isShiny;
             setPontuacao(prevPontuacao => prevPontuacao + (isShiny ? 3 : 1));
@@ -105,6 +109,7 @@ const Quiz = () => {
         const timeout = setTimeout(() => {
             setSelectedAnswer(null);
             setIsAnswerCorrect(null);
+            setAlternativasDesabilitadas(false); // Habilita os botões para a próxima pergunta
             if (!quizTerminado) {
                 loadNextQuestion().then(setQuizData);
             }
@@ -129,9 +134,10 @@ const Quiz = () => {
         setHp(100);
         setSelectedAnswer(null);
         setIsAnswerCorrect(false);
-        setTempoTotal(120);
+        setTempoTotal(99999);
         setIsStarted(true);
         setTimer(5);
+        setAlternativasDesabilitadas(false); // Habilita os botões de alternativas
         await loadNextQuestion().then(setQuizData);
     };
 
@@ -174,6 +180,7 @@ const Quiz = () => {
                 negrito="bold"
                 fundo="#2b2d42"
                 cor="white"
+                borderRadius="0px 0px 50px 50px"
             > PokéQuiz! </Titulo>
             {!isStarted && !quizTerminado && <Regras />}
             {!isStarted && !quizTerminado && <Input type="text" placeholder="Digite seu nome" onBlur={handleBlur}/>}
@@ -182,24 +189,42 @@ const Quiz = () => {
             {isStarted && timer > 0 && <Subtitulo margem="50px" cor="#fff"> O quiz começará em {timer} segundos </Subtitulo>}
             {isStarted && timer === 0 && quizData && 
                 <QuizIniciadoContainer>
-                    <QuizElementos>
+                    <QuizElementos
+                        justify="space-around"
+                    >
                         <TempoRestante 
                             tempo={`${Math.floor(tempoTotal / 60)}:${(tempoTotal % 60).toString().padStart(2, '0')}`}
                         />
-                        <Titulo tamanho="1.5rem"> Pontuação: {pontuacao} </Titulo>
-                        <Botao cor="red"> Pular </Botao>
+                        <Titulo 
+                            largura="auto"
+                            tamanho="1.5rem"
+                            negrito="bold"
+                            fundo="none"
+                            cor="#fff"
+                        > Pontuação: {pontuacao} </Titulo>
+                        <SkipContainer>
+                            <Botao cor="red"> Pular </Botao>
+                            <SkipPokeballs />
+                        </SkipContainer>
                     </QuizElementos>
 
-                    <Subtitulo> {quizData.pergunta} </Subtitulo>
-                    {quizData.tipo === 'pokemon' && <img src={quizData.sprite} alt={quizData.correta} />}
-                    {quizData.tipo === 'pokemon' && <p>{quizData.isShiny && '✨'}</p>}
-                    {quizData.tipo === 'geral' && quizData.foto && <img src={quizData.foto} alt="Pergunta Geral" />}
-                    <QuizElementos>
+                    <Subtitulo
+                        cor="#fff"
+                    > {quizData.pergunta} </Subtitulo>
+                    {quizData.tipo === 'pokemon' && <ImagemQuiz src={quizData.sprite} alt={quizData.correta} />}
+                    {quizData.tipo === 'pokemon' && <p style={{fontSize: '2rem'}}>{quizData.isShiny && '✨'}</p>}
+                    {quizData.tipo === 'geral' && quizData.foto && <ImagemQuiz src={quizData.foto} alt="Pergunta Geral" />}
+                    <QuizElementos 
+                        justify="space-between"
+                    >   
+                        <AlternativasContainer>
                         {quizData.alternativas.map((alternativa, index) => (
                             <Botao 
-                                key={index} 
+                                key={index}
+                                cor={"#023e8a"}
                                 onClick={() => handleAnswerClick(alternativa)} 
                                 corHover={"grey"}
+                                disabled={alternativasDesabilitadas} // Desabilita o botão se alternativasDesabilitadas for true
                                 style={{ 
                                     backgroundColor: selectedAnswer === alternativa 
                                     ? (isAnswerCorrect ? 'green' : 'red') 
@@ -209,6 +234,7 @@ const Quiz = () => {
                                 {alternativa} 
                             </Botao>
                         ))}
+                        </AlternativasContainer>
                         <HP valor={hp} />
                     </QuizElementos>
                 </QuizIniciadoContainer>

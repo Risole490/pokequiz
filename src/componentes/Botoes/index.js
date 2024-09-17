@@ -19,13 +19,22 @@ const BotaoTexto = styled.p`
     font-weight: ${props => props.negrito || "normal"};
 `;
 
+const SkipContainer = styled.div`
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+`;
 
-const Botao = ({ onClick, children, cor, efeitoHover, style }) => {
+
+const Botao = ({ onClick, children, cor, efeitoHover, style, disabled }) => {
     return (
         <BotaoStyled 
             cor={cor} 
             onClick={onClick} 
             efeitoHover={efeitoHover}
+            disabled={disabled}
             style={style}
         >
             <BotaoTexto
@@ -38,4 +47,4 @@ const Botao = ({ onClick, children, cor, efeitoHover, style }) => {
 
 
 
-export { Botao };
+export { Botao, SkipContainer };

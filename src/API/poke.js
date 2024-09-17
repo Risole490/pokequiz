@@ -16,7 +16,8 @@ async function pega4Pokemons() {
 function formataNome(nome) {
     if (!nome) {
         console.error('Nome inválido:', nome);
-        return 'Boa sorte';
+        let nomeFormatado = 'Boa Sorte!';
+        return nomeFormatado;
     } 
 
     console.log(nome);

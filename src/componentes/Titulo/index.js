@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const Titulo = styled.h1`
-    width: 100%;
-    border-radius: 0px 0px 50px 50px;
+    width: ${props => props.largura || "100%"};
+    border-radius: ${props => props.borderRadius || "5px"};
     padding: 5px;
     background-color: ${props => props.fundo || "white"};
     text-align: ${props => props.alinhamento || "center"};
