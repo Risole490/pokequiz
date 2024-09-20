@@ -39,7 +39,19 @@ const Quiz = () => {
     const [errorMessage, setErrorMessage] = useState(''); // Estado para mensagem de erro
     const [ranking, setRanking] = useState([]); // Estado para o ranking
     const [alternativasDesabilitadas, setAlternativasDesabilitadas] = useState(false);
+    const [pokeballsCount, setPokeballsCount] = useState(3);
+    const [isSkipping, setIsSkipping] = useState(false);
 
+    const handleSkip = () => {
+        if (pokeballsCount > 0 && !isSkipping) {
+            setPokeballsCount(pokeballsCount - 1);
+            setIsSkipping(true);
+            setTimeout(() => {
+                setIsSkipping(false);
+            }, 1000); // 1 segundo de atraso
+            loadNextQuestion().then(setQuizData);
+        }
+    };
 
     useEffect(() => { // Função que será executada toda vez que o componente for renderizado
         let interval; // Variável que armazenará o intervalo de tempo
@@ -203,8 +215,12 @@ const Quiz = () => {
                             cor="#fff"
                         > Pontuação: {pontuacao} </Titulo>
                         <SkipContainer>
-                            <Botao cor="red"> Pular </Botao>
-                            <SkipPokeballs />
+                            <Botao 
+                                cor="red"
+                                onClick={handleSkip}
+                                disabled={isSkipping}
+                            > Pular </Botao>
+                            <SkipPokeballs  pokeballsCount={pokeballsCount}/>
                         </SkipContainer>
                     </QuizElementos>
 

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import React, { useState } from 'react';
 
 const VisualHPContainer = styled.div`
     display: flex;
@@ -49,17 +50,15 @@ const TempoRestante = ({ tempo }) => {
     )
 }
 
-const SkipPokeballs = ({ onClick }) => {
-    const pokeballImages = Array(3).fill("/Images/Gerais/pokeball.png");
-
+const SkipPokeballs = ({ pokeballsCount }) => {
     return (
-            <PokeballsContainer>
-            {pokeballImages.map((src, index) => (
-                    <PokeballImage key={index} src={src} alt="Pokeball" />
-                ))}
-            </PokeballsContainer>
-    )
-}
+        <PokeballsContainer>
+            {Array(pokeballsCount).fill("/Images/Gerais/pokeball.png").map((src, index) => (
+                <PokeballImage key={index} src={src} alt="Pokeball" />
+            ))}
+        </PokeballsContainer>
+    );
+};
 
 const MensagemErro = ({ mensagem }) => {
     return (

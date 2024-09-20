@@ -22,7 +22,7 @@ const QuizElementos = styled.div`
 
 const ImagemQuiz = styled.img`
     width: 500px;
-    height: 100%;
+    height: 90%;
 `
 
 const AlternativasContainer = styled.div`

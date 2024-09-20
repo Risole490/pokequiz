@@ -15,10 +15,8 @@ async function pega4Pokemons() {
 
 function formataNome(nome) {
     if (!nome) {
-        console.error('Nome inválido:', nome);
-        let nomeFormatado = 'Boa Sorte!';
-        return nomeFormatado;
-    } 
+        return 'BONUSSSS!';
+    }
 
     console.log(nome);
     // Remove hífens e outros caracteres indesejados
@@ -27,6 +25,8 @@ function formataNome(nome) {
     nomeFormatado = nomeFormatado.replace(/\bstandard\b/gi, '');
     // Remove a palavra tower
     nomeFormatado = nomeFormatado.replace(/\btower\b/gi, '');
+    // Remove a palavra totem
+    nomeFormatado = nomeFormatado.replace(/\totem\b/gi, '');
     // Remove a palavra large
     nomeFormatado = nomeFormatado.replace(/\blarge\b/gi, '');
     // Remove a palavra small
