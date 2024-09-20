@@ -15,7 +15,7 @@ async function pega4Pokemons() {
 
 function formataNome(nome) {
     if (!nome) {
-        return 'BONUSSSS!';
+        return '-';
     }
 
     console.log(nome);
@@ -51,8 +51,8 @@ async function extraiDadosPokemons() {
         const data = await response.json();
         const isShiny = chanceShiny();
 
-        if(data.sprites.other['official-artwork']['front_shiny'] === null || data.sprites.other['official-artwork']['front_default'] === null){
-            return extraiDadosPokemons();
+        if (data.sprites.other['official-artwork']['front_shiny'] === null || data.sprites.other['official-artwork']['front_default'] === null) {
+            return null; // Retorna null se os sprites não estiverem disponíveis
         } else {
             return {
                 nome: data.name,
@@ -62,8 +62,17 @@ async function extraiDadosPokemons() {
         }
     }));
 
-    const pokemonCorreto = detalhesPokemons.find(pokemon => pokemon.nome === pokemonEscolhido.name);
-    const alternativasErradas = detalhesPokemons
+    // Filtra valores nulos
+    const detalhesPokemonsFiltrados = detalhesPokemons.filter(pokemon => pokemon !== null);
+
+    const pokemonCorreto = detalhesPokemonsFiltrados.find(pokemon => pokemon.nome === pokemonEscolhido.name);
+
+    if (!pokemonCorreto) {
+        // Se não encontrar o Pokémon correto, tenta novamente
+        return extraiDadosPokemons();
+    }
+
+    const alternativasErradas = detalhesPokemonsFiltrados
         .filter(pokemon => pokemon.nome !== pokemonEscolhido.name)
         .map(pokemon => formataNome(pokemon.nome));
 
@@ -76,8 +85,7 @@ async function extraiDadosPokemons() {
             sprite: pokemonCorreto.sprite,
             shiny: pokemonCorreto.shiny
         },
-        alternativas: alternativas,
-        pergunta: `Qual o nome desse pokémon?`
+        alternativas: alternativas.sort(() => Math.random() - 0.5) // Embaralha as alternativas
     };
 }
 

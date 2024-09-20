@@ -147,12 +147,28 @@ const Quiz = () => {
         setHp(100);
         setSelectedAnswer(null);
         setIsAnswerCorrect(false);
-        setTempoTotal(4);
+        setTempoTotal(10);
         setIsStarted(true);
         setTimer(5);
         setAlternativasDesabilitadas(false); // Habilita os botões de alternativas
         await loadNextQuestion().then(setQuizData);
     };
+
+    const resetQuiz = () => {
+        setIsStarted(false);
+        setQuizTerminado(false);
+        setNome('');
+        setPontuacao(0);
+        setHp(100);
+        setTempoTotal(120);
+        setPokeballsCount(3);
+        setSelectedAnswer(null);
+        setIsAnswerCorrect(null);
+        setAlternativasDesabilitadas(false);
+        setRanking([]);
+        setErrorMessage('');
+    };
+
 
     const updateRanking = useCallback(async () => {
         try {
@@ -266,7 +282,7 @@ const Quiz = () => {
                         borderRadius="5px"
                     >Sua pontuação: {pontuacao}</Subtitulo>
                     <Ranking ranking={ranking} />
-                    <Botao cor="#2b2d42" onClick={startQuiz}> Jogar Novamente </Botao>
+                    <Botao cor="#2b2d42" onClick={resetQuiz}> Jogar Novamente </Botao>
                 </QuizTerminado>
             )}
         </QuizContainer>

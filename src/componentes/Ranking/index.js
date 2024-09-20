@@ -19,9 +19,9 @@ const RankingItems = styled.ul`
 
 const RankingItem = styled.li`
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    width: 80%;
+    width: 100%;
     padding: 10px;
     background-color: #2b2d42;
     border-radius: 10px;
