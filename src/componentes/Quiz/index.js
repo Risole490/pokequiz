@@ -12,6 +12,7 @@ import { QuizIniciadoContainer, QuizElementos, ImagemQuiz, AlternativasContainer
 import { HP, TempoRestante, MensagemErro, SkipPokeballs } from '../Visuals';
 import { Input } from '../Inputs';
 import Ranking from '../Ranking';
+import QuizTerminado from '../QuizTerminado';
 
 const QuizContainer = styled.section`
     background: radial-gradient(circle, rgba(0,42,255,1) 0%, rgba(252,70,70,1) 100%);
@@ -146,7 +147,7 @@ const Quiz = () => {
         setHp(100);
         setSelectedAnswer(null);
         setIsAnswerCorrect(false);
-        setTempoTotal(99999);
+        setTempoTotal(4);
         setIsStarted(true);
         setTimer(5);
         setAlternativasDesabilitadas(false); // Habilita os botões de alternativas
@@ -256,12 +257,17 @@ const Quiz = () => {
                 </QuizIniciadoContainer>
             }
             {quizTerminado && (
-                <div>
-                    <Titulo tamanho="2rem"> Fim do quiz! </Titulo>
-                    <p>Sua pontuação: {pontuacao}</p>
-                    <Botao cor="red" onClick={startQuiz}> Jogar Novamente </Botao>
+                <QuizTerminado>
+                    <Subtitulo
+                        negrito="bold"
+                        cor="#fff"
+                        fundo="#2b2d42"
+                        padding="10px"
+                        borderRadius="5px"
+                    >Sua pontuação: {pontuacao}</Subtitulo>
                     <Ranking ranking={ranking} />
-                </div>
+                    <Botao cor="#2b2d42" onClick={startQuiz}> Jogar Novamente </Botao>
+                </QuizTerminado>
             )}
         </QuizContainer>
     );

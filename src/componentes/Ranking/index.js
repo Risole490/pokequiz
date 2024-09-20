@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Titulo } from "../Titulo";
 
 const RankingContainer = styled.div`
     display: flex;
@@ -8,7 +9,15 @@ const RankingContainer = styled.div`
     margin: 20px;
 `
 
-const RankingItem = styled.div`
+const RankingItems = styled.ul`
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    list-style: none;
+`
+
+const RankingItem = styled.li`
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -16,6 +25,8 @@ const RankingItem = styled.div`
     padding: 10px;
     background-color: #2b2d42;
     border-radius: 10px;
+    font-weight: bold;
+    font-family: 'Arial', sans-serif;
     color: #fff;
 `
 
@@ -25,14 +36,18 @@ const Ranking = ({ ranking }) => {
 
     return (
         <RankingContainer>
-            <h2>Ranking</h2>
-            <ul>
+            <Titulo
+                fundo="none"
+                cor="#fff"
+                tamanho="2rem"
+            >🏆 Ranking 🏆</Titulo>
+            <RankingItems>
                 {sortedRanking.map((item, index) => (
                     <RankingItem key={index}>
                         {item.nome}: {item.pontuacao}
                     </RankingItem>
                 ))}
-            </ul>
+            </RankingItems>
         </RankingContainer>
     );
 };

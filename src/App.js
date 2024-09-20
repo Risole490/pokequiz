@@ -2,6 +2,7 @@ import styled from "styled-components";
 import Header from "./componentes/Header";
 import Quiz from "./componentes/Quiz";
 import './reset.css';
+import Footer from "./componentes/Footer";
 
 const AppContainer = styled.div`
   width: 100vw;
@@ -17,6 +18,7 @@ function App() {
     <AppContainer>
       <Header />
       <Quiz />
+      <Footer />
     </AppContainer>
   );
 }
