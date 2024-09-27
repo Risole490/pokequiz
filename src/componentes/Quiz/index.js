@@ -147,7 +147,7 @@ const Quiz = () => {
         setHp(100);
         setSelectedAnswer(null);
         setIsAnswerCorrect(false);
-        setTempoTotal(10);
+        setTempoTotal(120);
         setIsStarted(true);
         setTimer(5);
         setAlternativasDesabilitadas(false); // Habilita os botões de alternativas
