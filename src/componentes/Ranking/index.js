@@ -44,7 +44,7 @@ const Ranking = ({ ranking }) => {
             <RankingItems>
                 {sortedRanking.map((item, index) => (
                     <RankingItem key={index}>
-                        {item.nome}: {item.pontuacao}
+                        {item.nome}: {item.pontuacao} pontos
                     </RankingItem>
                 ))}
             </RankingItems>

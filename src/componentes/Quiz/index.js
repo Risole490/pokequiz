@@ -76,6 +76,7 @@ const Quiz = () => {
             clearInterval(interval);
             setIsStarted(false);
             setQuizTerminado(true);
+            handleFinishQuiz();
         }
         return () => clearInterval(interval);
     }, [isStarted, tempoTotal]);
@@ -95,6 +96,7 @@ const Quiz = () => {
         if (hp <= 0) {
             setQuizTerminado(true);
             setIsStarted(false);
+            handleFinishQuiz();
         }
     }, [hp]);
 
@@ -115,6 +117,7 @@ const Quiz = () => {
                 if (newHP <= 0) {
                     setQuizTerminado(true);
                     setIsStarted(false);
+                    handleFinishQuiz();
                 }
                 return newHP;
             });
@@ -141,7 +144,6 @@ const Quiz = () => {
             return;
         }
         setErrorMessage(''); // Limpa a mensagem de erro se o nome estiver preenchido
-        resetQuiz();
         setQuizTerminado(false);
         setPontuacao(0);
         setHp(100);
@@ -151,7 +153,6 @@ const Quiz = () => {
         setIsStarted(true);
         setTimer(5);
         setAlternativasDesabilitadas(false); // Habilita os botões de alternativas
-        await loadNextQuestion().then(setQuizData);
     };
 
     const resetQuiz = () => {
@@ -169,38 +170,61 @@ const Quiz = () => {
         setErrorMessage('');
     };
 
+    useEffect(() => {
+        const fetchRanking = async () => {
+            try {
+                const response = await fetch('/api/ranking');
+                const data = await response.json();
+                setRanking(data);
+            } catch (error) {
+                console.error('Erro ao buscar o ranking:', error);
+            }
+        };
 
-    const updateRanking = useCallback(async () => {
+        fetchRanking();
+    }, []);
+
+
+    const handleFinishQuiz = async () => {
+        setQuizTerminado(true);
+        await updateRanking(nome, pontuacao);
+        fetchRanking();
+    };
+
+    const updateRanking = async (nome, pontuacao) => {
+        const newRanking = [...ranking, { nome, pontuacao }];
+        setRanking(newRanking);
+        // Aqui você pode enviar o ranking atualizado para o servidor, se necessário
+
         try {
-            const response = await fetch('http://localhost:5000/api/update-ranking', {
+            const response = await fetch('/api/update-ranking', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ nome, pontuacao }),
+                body: JSON.stringify({ nome, pontuacao })
             });
 
             if (!response.ok) {
                 throw new Error('Erro ao atualizar o ranking');
             }
 
-            console.log('Ranking atualizado com sucesso');
-
-            // Obter o ranking atualizado
-            const rankingResponse = await fetch('http://localhost:5000/api/ranking');
-            const rankingData = await rankingResponse.json();
-            setRanking(rankingData); // Atualiza o estado do ranking
-
+            const result = await response.json();
+            console.log(result.message);
         } catch (error) {
-            console.error('Erro ao atualizar o ranking', error);
+            console.error('Erro ao enviar o ranking para o servidor:', error);
         }
-    }, [nome, pontuacao]);
+    };
 
-    useEffect(() => {
-        if (quizTerminado) {
-            updateRanking();
+    const fetchRanking = async () => {
+        try {
+            const response = await fetch('/api/ranking');
+            const data = await response.json();
+            setRanking(data);
+        } catch (error) {
+            console.error('Erro ao buscar o ranking:', error);
         }
-    }, [quizTerminado, updateRanking]);
+    };
 
     return (
         <QuizContainer>
