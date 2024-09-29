@@ -1,8 +1,8 @@
 // funcoesQuiz.js
 import { embaralharArray } from './utils';
 import { extraiDadosPokemons } from '../API/poke';
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-
+import { db } from '../firebaseclientConfig';
+import { collection, getDocs } from 'firebase/firestore';
 
 let usedQuestions = new Set();
 let usedPokemon = new Set();
@@ -14,8 +14,9 @@ export function resetQuiz() {
 
 export async function loadNextQuestion() {
     const isPokemonQuestion = Math.random() < 0.5; // 50% de chance de ser uma pergunta de Pokémon
-    const response = await fetch(`${API_URL}/api/perguntas-gerais`);
-    const perguntasGerais = await response.json();
+    // Buscar perguntas gerais do Firestore
+    const perguntasGeraisSnapshot = await getDocs(collection(db, 'perguntasGerais'));
+    const perguntasGerais = perguntasGeraisSnapshot.docs.map(doc => doc.data());
 
     if (isPokemonQuestion || usedQuestions.size >= perguntasGerais.length) {
         let data;

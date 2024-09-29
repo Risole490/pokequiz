@@ -1,6 +1,7 @@
 {
   "name": "botrivia",
   "version": "1.1.0",
+  "main": "src/index.js",
   "private": true,
   "proxy": "http://localhost:5000",
   "dependencies": {
@@ -8,6 +9,10 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "firebase": "^10.13.2",
+    "firebase-admin": "^12.5.0",
+    "firebase-functions": "^6.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
@@ -15,7 +20,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
