@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled from "styled-components";
 
-import { loadNextQuestion, resetQuiz } from '../../Validações/funcoesQuiz'; // Importa a função de carregamento de perguntas
+import { loadNextQuestion } from '../../Validações/funcoesQuiz'; // Importa a função de carregamento de perguntas
 
 
 import { Subtitulo, Titulo } from "../Titulo";
@@ -39,6 +39,7 @@ const Quiz = () => {
     const [nome, setNome] = useState('');
     const [errorMessage, setErrorMessage] = useState(''); // Estado para mensagem de erro
     const [ranking, setRanking] = useState([]); // Estado para o ranking
+    const [rankingAtualizado, setRankingAtualizado] = useState(false);
     const [alternativasDesabilitadas, setAlternativasDesabilitadas] = useState(false);
     const [pokeballsCount, setPokeballsCount] = useState(3);
     const [isSkipping, setIsSkipping] = useState(false);
@@ -66,20 +67,7 @@ const Quiz = () => {
         return () => clearInterval(interval); // Função que será executada toda vez que o componente for desmontado
     }, [isStarted, timer]); // Dependências que farão o useEffect ser executado
 
-    useEffect(() => {
-        let interval;
-        if (isStarted && tempoTotal > 0) {
-            interval = setInterval(() => {
-                setTempoTotal(prevTempo => prevTempo - 1);
-            }, 1000);
-        } else if (tempoTotal === 0) {
-            clearInterval(interval);
-            setIsStarted(false);
-            setQuizTerminado(true);
-            handleFinishQuiz();
-        }
-        return () => clearInterval(interval);
-    }, [isStarted, tempoTotal]);
+    
 
     useEffect(() => {
         if (isStarted && timer === 0) {
@@ -117,6 +105,7 @@ const Quiz = () => {
                 if (newHP <= 0) {
                     setQuizTerminado(true);
                     setIsStarted(false);
+                    console.log('Chamando handleFinishQuiz LINHA 121');
                     handleFinishQuiz();
                 }
                 return newHP;
@@ -147,9 +136,10 @@ const Quiz = () => {
         setQuizTerminado(false);
         setPontuacao(0);
         setHp(100);
+        setRankingAtualizado(false);
         setSelectedAnswer(null);
         setIsAnswerCorrect(false);
-        setTempoTotal(120);
+        setTempoTotal(30);
         setIsStarted(true);
         setTimer(5);
         setAlternativasDesabilitadas(false); // Habilita os botões de alternativas
@@ -170,59 +160,65 @@ const Quiz = () => {
         setErrorMessage('');
     };
 
-    useEffect(() => {
-        const fetchRanking = async () => {
-            try {
-                const response = await fetch('/api/ranking');
-                const data = await response.json();
-                setRanking(data);
-            } catch (error) {
-                console.error('Erro ao buscar o ranking:', error);
-            }
-        };
-
-        fetchRanking();
-    }, []);
-
-
-    const handleFinishQuiz = async () => {
-        setQuizTerminado(true);
-        await updateRanking(nome, pontuacao);
-        fetchRanking();
-    };
-
-    const updateRanking = async (nome, pontuacao) => {
-        const newRanking = [...ranking, { nome, pontuacao }];
-        setRanking(newRanking);
-        // Aqui você pode enviar o ranking atualizado para o servidor, se necessário
-
+    const fetchRanking = async () => {
         try {
-            const response = await fetch('/api/update-ranking', {
-                method: 'POST',
+            const response = await fetch('https://getranking-eiqiamgogq-uc.a.run.app', {
+                method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ nome, pontuacao })
             });
-
             if (!response.ok) {
-                throw new Error('Erro ao atualizar o ranking');
+                throw new Error('Erro ao buscar o ranking');
             }
-
-            const result = await response.json();
-            console.log(result.message);
+            const data = await response.json();
+            setRanking(data);
+            return data;
         } catch (error) {
-            console.error('Erro ao enviar o ranking para o servidor:', error);
+            console.error('Erro ao buscar o ranking:', error);
         }
     };
 
-    const fetchRanking = async () => {
+    const handleFinishQuiz = useCallback(async () => {
+        if (!rankingAtualizado) {
+            await updateRanking(nome, pontuacao);
+            const ranking = await fetchRanking();
+            setRanking(ranking);
+            setRankingAtualizado(true);
+        }
+    }, [nome, pontuacao, rankingAtualizado]);
+
+    useEffect(() => {
+        let interval;
+        if (isStarted && tempoTotal > 0) {
+            interval = setInterval(() => {
+                setTempoTotal(prevTempo => prevTempo - 1);
+            }, 1000);
+        } else if (tempoTotal === 0 && !quizTerminado) {
+            clearInterval(interval);
+            setIsStarted(false);
+            setQuizTerminado(true);
+            handleFinishQuiz();
+        }
+        return () => clearInterval(interval);
+    }, [isStarted, tempoTotal, quizTerminado, handleFinishQuiz]);
+
+    async function updateRanking(nome, pontuacao) {
         try {
-            const response = await fetch('/api/ranking');
+            const response = await fetch('https://updateranking-eiqiamgogq-uc.a.run.app', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ nome, pontuacao }),
+            });
+            if (!response.ok) {
+                throw new Error('Erro ao atualizar o ranking');
+            }
             const data = await response.json();
-            setRanking(data);
+            return data;
         } catch (error) {
-            console.error('Erro ao buscar o ranking:', error);
+            console.error('Erro ao atualizar o ranking:', error);
         }
     };
 
