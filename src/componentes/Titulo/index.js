@@ -1,6 +1,9 @@
 import styled from "styled-components";
 
 export const Titulo = styled.h1`
+    position: ${props => props.posicao || "static"};
+    top: ${props => props.topo || "0px"};
+    right: ${props => props.direita || "0"};
     width: ${props => props.largura || "100%"};
     border-radius: ${props => props.borderRadius || "5px"};
     padding: 5px;

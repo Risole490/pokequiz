@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Fragment } from 'react';
 import styled from "styled-components";
 
 import { loadNextQuestion } from '../../Validações/funcoesQuiz'; // Importa a função de carregamento de perguntas
@@ -15,10 +15,11 @@ import Ranking from '../Ranking';
 import QuizTerminado from '../QuizTerminado';
 
 const QuizContainer = styled.section`
-    background: radial-gradient(circle, rgba(0,42,255,1) 0%, rgba(252,70,70,1) 100%);
-    padding: 0px 10px;
+    background-color: rgba(0, 0, 20, 0.6); /* Cor com opacidade */
     width: 700px;
     height: 100vh;
+    box-sizing: border-box;
+    margin-top: 13em;
     display: flex;
     gap: 0;
     flex-direction: column;
@@ -139,7 +140,7 @@ const Quiz = () => {
         setRankingAtualizado(false);
         setSelectedAnswer(null);
         setIsAnswerCorrect(false);
-        setTempoTotal(30);
+        setTempoTotal(999);
         setIsStarted(true);
         setTimer(5);
         setAlternativasDesabilitadas(false); // Habilita os botões de alternativas
@@ -224,13 +225,6 @@ const Quiz = () => {
 
     return (
         <QuizContainer>
-            <Titulo 
-                tamanho="2.5rem" 
-                negrito="bold"
-                fundo="#2b2d42"
-                cor="white"
-                borderRadius="0px 0px 50px 50px"
-            > PokéQuiz! </Titulo>
             {!isStarted && !quizTerminado && <Regras />}
             {!isStarted && !quizTerminado && <Input type="text" placeholder="Digite seu nome" onBlur={handleBlur}/>}
             {errorMessage && <MensagemErro mensagem={errorMessage} />} {/* Exibe a mensagem de erro */}
@@ -260,15 +254,15 @@ const Quiz = () => {
                             <SkipPokeballs  pokeballsCount={pokeballsCount}/>
                         </SkipContainer>
                     </QuizElementos>
-
-                    <Subtitulo
-                        cor="#fff"
-                    > {quizData.pergunta} </Subtitulo>
+                    
                     {quizData.tipo === 'pokemon' && <ImagemQuiz src={quizData.sprite} alt={quizData.correta} />}
                     {quizData.tipo === 'pokemon' && <p style={{fontSize: '2rem'}}>{quizData.isShiny && '✨'}</p>}
                     {quizData.tipo === 'geral' && quizData.foto && <ImagemQuiz src={quizData.foto} alt="Pergunta Geral" />}
-                    <QuizElementos 
-                        justify="space-between"
+                    {quizData.tipo === 'geral' && (
+                            <Subtitulo margem="1em" cor="#fff"> {quizData.pergunta} </Subtitulo>
+                    )}
+                    <QuizElementos
+                        justify=""
                     >   
                         <AlternativasContainer>
                         {quizData.alternativas.map((alternativa, index) => (

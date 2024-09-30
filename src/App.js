@@ -11,12 +11,14 @@ const AppContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  background: url('/Images/Gerais/Fundo.jpg') no-repeat center center;
+  background-size: cover;
 `
 
 function App() {
   return (
     <AppContainer>
-      <Header />
+      {/* <Header /> */}
       <Quiz />
       <Footer />
     </AppContainer>
