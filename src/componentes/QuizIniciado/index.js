@@ -17,8 +17,8 @@ const QuizElementos = styled.div`
 `
 
 const ImagemQuiz = styled.img`
-    width: 450px;
-    height: 450px;
+    width: ${props => props.width || "450px"};
+    height: ${props => props.height || "450px"};
 `
 
 const AlternativasContainer = styled.div`

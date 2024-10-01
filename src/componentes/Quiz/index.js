@@ -257,7 +257,13 @@ const Quiz = () => {
                     
                     {quizData.tipo === 'pokemon' && <ImagemQuiz src={quizData.sprite} alt={quizData.correta} />}
                     {quizData.tipo === 'pokemon' && <p style={{fontSize: '2rem'}}>{quizData.isShiny && '✨'}</p>}
-                    {quizData.tipo === 'geral' && quizData.foto && <ImagemQuiz src={quizData.foto} alt="Pergunta Geral" />}
+                    {quizData.tipo === 'geral' && quizData.foto && 
+                    <ImagemQuiz
+                        width={"250px"}
+                        height={"500px"}
+                        src={quizData.foto} 
+                        alt="Pergunta Geral" 
+                    />}
                     {quizData.tipo === 'geral' && (
                             <Subtitulo margem="1em" cor="#fff"> {quizData.pergunta} </Subtitulo>
                     )}
