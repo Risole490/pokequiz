@@ -265,7 +265,7 @@ const Quiz = () => {
                         alt="Pergunta Geral" 
                     />}
                     {quizData.tipo === 'geral' && (
-                            <Subtitulo margem="1em" cor="#fff" fundo="rgba(0, 0, 20, 0.6)"> {quizData.pergunta} </Subtitulo>
+                            <Subtitulo margem="1em" padding="5px" cor="#fff" fundo="rgba(0, 0, 20, 0.6)"> {quizData.pergunta} </Subtitulo>
                     )}
                     <QuizElementos
                         justify=""
