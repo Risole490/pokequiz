@@ -14,7 +14,7 @@ export const Titulo = styled.h1`
     font-size: ${props => props.tamanho || "4rem"};
     align-self: ${props => props.alinhamento || "center"};
     font-weight: ${props => props.negrito || "normal"};
-    font-family: ${props => props.fonte || "Arial"};
+    font-family: ${props => props.fonte || 'Play, sans-serif'};
 `;
 
 export const Subtitulo = styled.h2`
@@ -25,7 +25,7 @@ export const Subtitulo = styled.h2`
     border-radius: ${props => props.borderRadius || "0px"};
     font-size: ${props => props.tamanho || "2rem"};
     font-weight: ${props => props.negrito || "normal"};
-    font-family: ${props => props.fonte || "Arial"};
+    font-family: ${props => props.fonte || "Play, sans-serif"};
     background: ${props => props.gradiente || null};
     -webkit-background-clip: ${props => props.clip || null};
     -webkit-text-fill-color: ${props => props.fill || null};

@@ -55,7 +55,6 @@ async function extraiDadosPokemons() {
             return null; // Retorna null se os sprites não estiverem disponíveis
         } else {
             return {
-                pergunta: 'Qual é deste Pokémon?',
                 nome: data.name,
                 sprite: isShiny ? data.sprites.other['official-artwork']['front_shiny'] : data.sprites.other['official-artwork']['front_default'],
                 shiny: isShiny ? true : false

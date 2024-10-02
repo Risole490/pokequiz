@@ -4,7 +4,7 @@ const BotaoStyled = styled.button`
     background-color: ${props => props.cor || "blue"};
     color: ${props => props.corTexto || "white"};
     font-size: 1.2rem;
-    padding: 10px;
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -17,6 +17,8 @@ const BotaoStyled = styled.button`
 const BotaoTexto = styled.p`
     color: ${props => props.corTexto || "white"};
     font-weight: ${props => props.negrito || "normal"};
+    font-family: 'Play', sans-serif;
+    font-size: 1.3rem;
 `;
 
 const SkipContainer = styled.div`

@@ -6,6 +6,7 @@ const VisualHPContainer = styled.div`
     flex-direction: column;
     gap: 9px;
     align-items: center;
+    margin-right: ${props => props.marginRight || "0px"};
     padding: ${props => props.padding || "10px"};
     background-color: ${props => props.backgroundColor || "#fff"};
     border-radius: ${props => props.borderRadius || "5px"};
@@ -34,7 +35,10 @@ const PokeballImage = styled.img`
 
 const HP = ({ valor }) => {
     return (
-        <VisualHPContainer backgroundColor="#d00000">
+        <VisualHPContainer 
+            backgroundColor="#d00000"
+            marginRight="10px"
+        >
             <TextoVisual color="#fff">HP</TextoVisual>
             <TextoVisual color="#fff">{valor}</TextoVisual>
         </VisualHPContainer>

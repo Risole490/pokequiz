@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, Fragment } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled from "styled-components";
 
 import { loadNextQuestion } from '../../Validações/funcoesQuiz'; // Importa a função de carregamento de perguntas
@@ -15,11 +15,11 @@ import Ranking from '../Ranking';
 import QuizTerminado from '../QuizTerminado';
 
 const QuizContainer = styled.section`
-    background-color: rgba(0, 0, 20, 0.6); /* Cor com opacidade */
+    // background-color: rgba(0, 0, 20, 0.6); /* Cor com opacidade */
     width: 700px;
     height: 100vh;
     box-sizing: border-box;
-    margin-top: 13em;
+    margin-top: 11em;
     display: flex;
     gap: 0;
     flex-direction: column;
@@ -119,7 +119,7 @@ const Quiz = () => {
             if (!quizTerminado) {
                 loadNextQuestion().then(setQuizData);
             }
-        }, 1000);
+        }, 200);
     
         return () => clearTimeout(timeout); // Limpa o timeout quando o componente é desmontado
     };
@@ -228,7 +228,7 @@ const Quiz = () => {
             {!isStarted && !quizTerminado && <Regras />}
             {!isStarted && !quizTerminado && <Input type="text" placeholder="Digite seu nome" onBlur={handleBlur}/>}
             {errorMessage && <MensagemErro mensagem={errorMessage} />} {/* Exibe a mensagem de erro */}
-            {!isStarted && !quizTerminado && <Botao cor="#2b2d42" onClick={startQuiz}> Começar </Botao>}
+            {!isStarted && !quizTerminado && <Botao cor="rgba(0, 0, 20, 0.6)" onClick={startQuiz}> Começar </Botao>}
             {isStarted && timer > 0 && <Subtitulo margem="50px" cor="#fff"> O quiz começará em {timer} segundos </Subtitulo>}
             {isStarted && timer === 0 && quizData && 
                 <QuizIniciadoContainer>
@@ -265,7 +265,7 @@ const Quiz = () => {
                         alt="Pergunta Geral" 
                     />}
                     {quizData.tipo === 'geral' && (
-                            <Subtitulo margem="1em" cor="#fff"> {quizData.pergunta} </Subtitulo>
+                            <Subtitulo margem="1em" cor="#fff" fundo="rgba(0, 0, 20, 0.6)"> {quizData.pergunta} </Subtitulo>
                     )}
                     <QuizElementos
                         justify=""
