@@ -1,7 +1,8 @@
 // funcoesQuiz.js
 import { embaralharArray } from './utils';
 import { extraiDadosPokemons } from '../API/poke';
-import { db } from '../firebaseclientConfig';
+import { db, auth } from '../firebaseclientConfig';
+import { signInAnonymously } from 'firebase/auth';
 import { collection, getDocs } from 'firebase/firestore';
 
 let usedQuestions = new Set();
@@ -12,7 +13,17 @@ export function resetQuiz() {
     usedPokemon.clear();
 }
 
+async function authenticate() {
+    try {
+        await signInAnonymously(auth);
+        console.log('Authenticated anonymously');
+    } catch (error) {
+        console.error('Authentication failed:', error);
+    }
+}
 export async function loadNextQuestion() {
+    await authenticate(); // Ensure the user is authenticated before accessing Firestore
+
     const isPokemonQuestion = Math.random() < 0.1; // 50% de chance de ser uma pergunta de Pokémon
     // Buscar perguntas gerais do Firestore
     const perguntasGeraisSnapshot = await getDocs(collection(db, 'perguntasGerais'));

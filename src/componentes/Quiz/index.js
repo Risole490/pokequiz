@@ -45,6 +45,7 @@ const Quiz = () => {
     const [pokeballsCount, setPokeballsCount] = useState(3);
     const [isSkipping, setIsSkipping] = useState(false);
 
+    // Função para pular a pergunta, decrementando o contador de pokebolas e carregando a próxima pergunta
     const handleSkip = () => {
         if (pokeballsCount > 0 && !isSkipping) {
             setPokeballsCount(pokeballsCount - 1);
@@ -67,8 +68,6 @@ const Quiz = () => {
         }
         return () => clearInterval(interval); // Função que será executada toda vez que o componente for desmontado
     }, [isStarted, timer]); // Dependências que farão o useEffect ser executado
-
-    
 
     useEffect(() => {
         if (isStarted && timer === 0) {
