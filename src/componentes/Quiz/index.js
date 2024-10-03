@@ -45,7 +45,7 @@ const Quiz = () => {
     const [pokeballsCount, setPokeballsCount] = useState(3);
     const [isSkipping, setIsSkipping] = useState(false);
 
-    // Função para pular a pergunta, decrementando o contador de pokebolas e carregando a próxima pergunta
+// Função para pular a pergunta, decrementando o contador de pokebolas e carregando a próxima pergunta
     const handleSkip = () => {
         if (pokeballsCount > 0 && !isSkipping) {
             setPokeballsCount(pokeballsCount - 1);
@@ -57,6 +57,7 @@ const Quiz = () => {
         }
     };
 
+// Contagem regressiva para o início do quiz
     useEffect(() => { // Função que será executada toda vez que o componente for renderizado
         let interval; // Variável que armazenará o intervalo de tempo
         if (isStarted && timer > 0) { // Se o quiz foi iniciado e o timer é maior que 0, então inicia o intervalo
@@ -66,11 +67,14 @@ const Quiz = () => {
         } else if (timer === 0) { // Se o timer for igual a 0, então para o intervalo
             clearInterval(interval);
         }
+        console.log('LINHA 69');
         return () => clearInterval(interval); // Função que será executada toda vez que o componente for desmontado
     }, [isStarted, timer]); // Dependências que farão o useEffect ser executado
 
+// Função para carregar a próxima pergunta
     useEffect(() => {
         if (isStarted && timer === 0) {
+            console.log('LINHA 75');
             const fetchQuestion = async () => {
                 const nextQuestion = await loadNextQuestion();
                 setQuizData(nextQuestion);
@@ -80,14 +84,12 @@ const Quiz = () => {
         }
     }, [isStarted, timer]);
 
-    useEffect(() => {
-        if (hp <= 0) {
-            setQuizTerminado(true);
-            setIsStarted(false);
-            handleFinishQuiz();
-        }
-    }, [hp]);
+// Função para reduzir o HP
+    const reduzirHp = () => {
+        setHp(prevHP => prevHP - 5);
+    };
 
+// Função para lidar com o clique nas alternativas
     const handleAnswerClick = (alternativa) => {
         if (alternativasDesabilitadas) return; // Se os botões estiverem desabilitados, não faça nada
 
@@ -100,17 +102,10 @@ const Quiz = () => {
             const isShiny = quizData.tipo === 'pokemon' && quizData.isShiny;
             setPontuacao(prevPontuacao => prevPontuacao + (isShiny ? 3 : 1));
         } else {
-            setHp(prevHP => {
-                const newHP = prevHP - 5;
-                if (newHP <= 0) {
-                    setQuizTerminado(true);
-                    setIsStarted(false);
-                    console.log('Chamando handleFinishQuiz LINHA 121');
-                    handleFinishQuiz();
-                }
-                return newHP;
-            });
+            console.log('REDUZINDO HP');
+            reduzirHp();
         }
+
         const timeout = setTimeout(() => {
             setSelectedAnswer(null);
             setIsAnswerCorrect(null);
@@ -123,10 +118,12 @@ const Quiz = () => {
         return () => clearTimeout(timeout); // Limpa o timeout quando o componente é desmontado
     };
 
+// Função para capturar o nome do usuário
     const handleBlur = (event) => {
         setNome(event.target.value);
     };
 
+// Função para iniciar o quiz
     const startQuiz = async () => {
         if (!nome) {
             setErrorMessage('Por favor, preencha seu nome antes de começar o quiz.');
@@ -135,7 +132,7 @@ const Quiz = () => {
         setErrorMessage(''); // Limpa a mensagem de erro se o nome estiver preenchido
         setQuizTerminado(false);
         setPontuacao(0);
-        setHp(100);
+        setHp(10);
         setRankingAtualizado(false);
         setSelectedAnswer(null);
         setIsAnswerCorrect(false);
@@ -145,6 +142,7 @@ const Quiz = () => {
         setAlternativasDesabilitadas(false); // Habilita os botões de alternativas
     };
 
+// Função para reiniciar o quiz
     const resetQuiz = () => {
         setIsStarted(false);
         setQuizTerminado(false);
@@ -160,7 +158,8 @@ const Quiz = () => {
         setErrorMessage('');
     };
 
-    const fetchRanking = async () => {
+// Função para buscar o ranking
+    const fetchRanking = useCallback(async () => {
         try {
             const response = await fetch('https://getranking-eiqiamgogq-uc.a.run.app', {
                 method: 'GET',
@@ -172,22 +171,66 @@ const Quiz = () => {
                 throw new Error('Erro ao buscar o ranking');
             }
             const data = await response.json();
-            setRanking(data);
+            // setRanking(data);
             return data;
         } catch (error) {
             console.error('Erro ao buscar o ranking:', error);
         }
-    };
+    }, []);
 
+// Função para atualizar o ranking
+    const updateRanking = useCallback(async (nome, pontuacao) => {
+        const ranking = await fetchRanking();
+
+        const nomeExiste = ranking.some(item => item.nome === nome);
+
+        if (nomeExiste) {
+            console.log('Nome já existe no ranking');
+            return;
+        }
+
+        try {
+            const response = await fetch('https://updateranking-eiqiamgogq-uc.a.run.app', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ nome, pontuacao }),
+            });
+            console.log('Ranking atualizado com sucesso');
+            if (!response.ok) {
+                throw new Error('Erro ao atualizar o ranking');
+            }
+        } catch (error) {
+            console.error('Erro ao atualizar o ranking:', error);
+        }
+    }, [fetchRanking]);
+
+// Função para finalizar o quiz    
     const handleFinishQuiz = useCallback(async () => {
+        console.log('Entrou na função handleFinishQuiz LINHA 184');
         if (!rankingAtualizado) {
             await updateRanking(nome, pontuacao);
+            setRankingAtualizado(true);
             const ranking = await fetchRanking();
             setRanking(ranking);
-            setRankingAtualizado(true);
+            setQuizTerminado(true);
+        } else {
+            setQuizTerminado(true);
         }
-    }, [nome, pontuacao, rankingAtualizado]);
+    },  [fetchRanking, nome, pontuacao, rankingAtualizado, updateRanking]);
 
+// Verifica se o HP chegou a zero ou menos
+    useEffect(() => {
+        if (hp <= 0 && !quizTerminado) {
+            console.log('HP chegou a ZERO ou menos');
+            setIsStarted(false);
+            setQuizTerminado(true); // Marcar o quiz como finalizado
+            handleFinishQuiz();
+        }
+    }, [hp, quizTerminado, handleFinishQuiz]);
+
+// Contagem regressiva do tempo total
     useEffect(() => {
         let interval;
         if (isStarted && tempoTotal > 0) {
@@ -197,30 +240,11 @@ const Quiz = () => {
         } else if (tempoTotal === 0 && !quizTerminado) {
             clearInterval(interval);
             setIsStarted(false);
-            setQuizTerminado(true);
+            console.log('Chamando handleFinishQuiz LINHA 200');
             handleFinishQuiz();
         }
         return () => clearInterval(interval);
     }, [isStarted, tempoTotal, quizTerminado, handleFinishQuiz]);
-
-    async function updateRanking(nome, pontuacao) {
-        try {
-            const response = await fetch('https://updateranking-eiqiamgogq-uc.a.run.app', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ nome, pontuacao }),
-            });
-            if (!response.ok) {
-                throw new Error('Erro ao atualizar o ranking');
-            }
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error('Erro ao atualizar o ranking:', error);
-        }
-    };
 
     return (
         <QuizContainer>
