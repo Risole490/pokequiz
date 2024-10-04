@@ -25,6 +25,11 @@ const QuizContainer = styled.section`
     flex-direction: column;
     align-items: center;
     border-radius: 5px;
+
+    @media (min-width: 320px) and (max-width: 425px) {
+        width: 320px;
+        margin-top: 8em;
+    }
 `;
 
 const Quiz = () => {

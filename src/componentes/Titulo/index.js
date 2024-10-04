@@ -29,4 +29,8 @@ export const Subtitulo = styled.h2`
     background: ${props => props.gradiente || null};
     -webkit-background-clip: ${props => props.clip || null};
     -webkit-text-fill-color: ${props => props.fill || null};
+
+    @media (min-width: 320px) and (max-width: 425px) {
+        font-size: 1.2rem;
+    }
 `;

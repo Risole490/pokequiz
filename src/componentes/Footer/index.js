@@ -15,12 +15,16 @@ const FooterText = styled.p`
     font-style: italic;
     font-family: 'Arial', sans-serif;
     margin: 0;
+
+    @media (min-width: 320px) and (max-width: 425px) {
+        font-size: 12px;
+    }
 `;
 
 const Footer = () => {
     return (
         <FooterContainer>
-            <FooterText>Desenvolvido por Risole490</FooterText>
+            <FooterText>Desenvolvido por Leonardo Yan &copy; 2024 </FooterText>
         </FooterContainer>
     );
 }

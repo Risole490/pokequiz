@@ -7,6 +7,11 @@ const InputStyled = styled.input`
     border-radius: 5px;
     margin: 5px;
     font-size: 1.2rem;
+
+    @media (min-width: 320px) and (max-width: 425px) {
+        width: 200px;
+        font-size: 1rem;
+    }
 `;
 
 

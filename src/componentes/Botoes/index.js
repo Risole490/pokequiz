@@ -19,6 +19,10 @@ const BotaoTexto = styled.p`
     font-weight: ${props => props.negrito || "normal"};
     font-family: 'Play', sans-serif;
     font-size: 1.3rem;
+
+    @media (min-width: 320px) and (max-width: 425px) {
+        font-size: 1.2rem;
+    }
 `;
 
 const SkipContainer = styled.div`

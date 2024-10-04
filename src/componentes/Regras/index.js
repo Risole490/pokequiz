@@ -11,6 +11,11 @@ const RegrasContainer = styled.div`
     gap: 10px;
     background-color: rgba(0, 0, 20, 0.6);;
     border-radius: 10px;
+
+    @media (min-width: 320px) and (max-width: 425px) {
+        width: 80%;
+        margin: 20px 0px;
+    }
 `
 
 const ListaRegras = styled.ol`
@@ -29,6 +34,10 @@ const ItemRegras = styled.li`
     font-family: 'Work Sans', sans-serif;
     font-weight: 400;
     color: #fff;
+
+    @media (min-width: 320px) and (max-width: 425px) {
+        font-size: 0.9rem;
+    }
 `
 
 const Regras = () => {
