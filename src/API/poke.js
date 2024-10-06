@@ -26,7 +26,7 @@ function formataNome(nome) {
     // Remove a palavra tower
     nomeFormatado = nomeFormatado.replace(/\btower\b/gi, '');
     // Remove a palavra totem
-    nomeFormatado = nomeFormatado.replace(/\totem\b/gi, '');
+    nomeFormatado = nomeFormatado.replace(/\btotem\b/gi, '');
     // Remove a palavra large
     nomeFormatado = nomeFormatado.replace(/\blarge\b/gi, '');
     // Remove a palavra small

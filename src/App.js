@@ -12,10 +12,6 @@ const AppContainer = styled.div`
   gap: 10px;
   background: url('/Images/Gerais/Fundo.jpg') no-repeat center center;
   background-size: cover;
-
-  @media (max-width: 768px) {
-    
-  }
 `
 
 function App() {

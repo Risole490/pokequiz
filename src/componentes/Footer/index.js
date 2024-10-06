@@ -25,6 +25,7 @@ const Footer = () => {
     return (
         <FooterContainer>
             <FooterText>Desenvolvido por Leonardo Yan &copy; 2024 </FooterText>
+            <FooterText>Fundo por Guinsilva &copy;</FooterText>
         </FooterContainer>
     );
 }

@@ -1,7 +1,7 @@
 // funcoesQuiz.js
 import { embaralharArray } from './utils';
 import { extraiDadosPokemons } from '../API/poke';
-import { db, auth, authenticate} from '../firebaseclientConfig';
+import { db, authenticate} from '../firebaseclientConfig';
 import { collection, getDocs } from 'firebase/firestore';
 
 let usedQuestions = new Set();

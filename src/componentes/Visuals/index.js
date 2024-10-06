@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import React, { useState } from 'react';
 
 const VisualHPContainer = styled.div`
     display: flex;
@@ -19,6 +18,10 @@ const TextoVisual = styled.p`
     text-align: center;
     color: ${props => props.color || "#000"};
     font-family: 'Arial', sans-serif;
+
+    @media (min-width: 320px) and (max-width: 425px) {
+        font-size: 1rem;
+    }
 `
 
 const PokeballsContainer = styled.div`

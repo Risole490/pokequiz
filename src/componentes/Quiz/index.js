@@ -19,7 +19,7 @@ const QuizContainer = styled.section`
     width: 700px;
     height: 100vh;
     box-sizing: border-box;
-    margin-top: 11em;
+    margin-top: 8em;
     display: flex;
     gap: 0;
     flex-direction: column;
@@ -28,7 +28,12 @@ const QuizContainer = styled.section`
 
     @media (min-width: 320px) and (max-width: 425px) {
         width: 320px;
-        margin-top: 8em;
+        margin-top: 2em;
+    }
+
+    @media (min-width: 426px) and (max-width: 768px) {
+        width: 420px;
+        margin-top: 2em;
     }
 `;
 

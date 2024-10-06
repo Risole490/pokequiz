@@ -15,6 +15,10 @@ export const Titulo = styled.h1`
     align-self: ${props => props.alinhamento || "center"};
     font-weight: ${props => props.negrito || "normal"};
     font-family: ${props => props.fonte || 'Play, sans-serif'};
+
+    @media (min-width: 320px) and (max-width: 425px) {
+        font-size: 1.2rem;
+    }
 `;
 
 export const Subtitulo = styled.h2`
@@ -26,6 +30,7 @@ export const Subtitulo = styled.h2`
     font-size: ${props => props.tamanho || "2rem"};
     font-weight: ${props => props.negrito || "normal"};
     font-family: ${props => props.fonte || "Play, sans-serif"};
+    text-align: ${props => props.alinhamento || "center"};
     background: ${props => props.gradiente || null};
     -webkit-background-clip: ${props => props.clip || null};
     -webkit-text-fill-color: ${props => props.fill || null};

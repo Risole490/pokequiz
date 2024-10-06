@@ -12,16 +12,20 @@ const BotaoStyled = styled.button`
     &:hover {
         scale: ${props => props.efeitoHover || 1.1};
     }
+
+    @media (min-width: 320px) and (max-width: 425px) {
+        padding: 10px 15px;
+    }
 `;
 
 const BotaoTexto = styled.p`
     color: ${props => props.corTexto || "white"};
     font-weight: ${props => props.negrito || "normal"};
     font-family: 'Play', sans-serif;
-    font-size: 1.3rem;
+    font-size: ${props => props.tamanho || "1.3rem"};
 
     @media (min-width: 320px) and (max-width: 425px) {
-        font-size: 1.2rem;
+        font-size: 1rem;
     }
 `;
 

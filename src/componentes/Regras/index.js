@@ -16,6 +16,11 @@ const RegrasContainer = styled.div`
         width: 80%;
         margin: 20px 0px;
     }
+
+    @media (min-width: 426px) and (max-width: 768px) {
+        width: 80%;
+        margin: 20px 0px;
+    }
 `
 
 const ListaRegras = styled.ol`

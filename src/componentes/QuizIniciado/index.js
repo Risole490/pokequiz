@@ -22,6 +22,21 @@ const QuizElementos = styled.div`
 const ImagemQuiz = styled.img`
     width: ${props => props.width || "450px"};
     height: ${props => props.height || "450px"};
+
+    @media (min-width: 320px) and (max-width: 370px) {
+        width: 280px;
+        height: 100%;
+    } 
+
+    @media (min-width: 371px) and (max-width: 425px) {
+        width: 300px;
+        height: 100%;
+    }
+    
+    @media (min-width: 426px) and (max-width: 768px) {
+        width: 390px;
+        height: 100%;
+    }
 `
 
 const AlternativasContainer = styled.div`
@@ -31,6 +46,10 @@ const AlternativasContainer = styled.div`
     gap: 10px;
     justify-content: center;
     align-items: center;
+
+    @media (min-width: 320px) and (max-width: 425px) {
+        flex-direction: column;
+    }
 `
 
 export { QuizIniciadoContainer, QuizElementos, ImagemQuiz, AlternativasContainer };
