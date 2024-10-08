@@ -16,10 +16,10 @@ import QuizTerminado from '../QuizTerminado';
 
 const QuizContainer = styled.section`
     // background-color: rgba(0, 0, 20, 0.6); /* Cor com opacidade */
-    width: 700px;
+    width: 800px;
     height: 100vh;
     box-sizing: border-box;
-    margin-top: 8em;
+    margin-top: 5em;
     display: flex;
     gap: 0;
     flex-direction: column;
@@ -141,11 +141,11 @@ const Quiz = () => {
         setErrorMessage(''); // Limpa a mensagem de erro se o nome estiver preenchido
         setQuizTerminado(false);
         setPontuacao(0);
-        setHp(10);
+        setHp(100);
         setRankingAtualizado(false);
         setSelectedAnswer(null);
         setIsAnswerCorrect(false);
-        setTempoTotal(999);
+        setTempoTotal(305);
         setIsStarted(true);
         setTimer(5);
         setAlternativasDesabilitadas(false); // Habilita os botões de alternativas

@@ -20,8 +20,8 @@ const QuizElementos = styled.div`
 `
 
 const ImagemQuiz = styled.img`
-    width: ${props => props.width || "450px"};
-    height: ${props => props.height || "450px"};
+    width: ${props => props.width || "600px"};
+    height: ${props => props.height || "600px"};
 
     @media (min-width: 320px) and (max-width: 370px) {
         width: 280px;
