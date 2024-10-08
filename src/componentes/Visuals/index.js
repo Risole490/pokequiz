@@ -39,11 +39,11 @@ const PokeballImage = styled.img`
 const HP = ({ valor }) => {
     return (
         <VisualHPContainer 
-            backgroundColor="#d00000"
+            backgroundColor="#fff"
             marginRight="10px"
         >
-            <TextoVisual color="#fff">HP</TextoVisual>
-            <TextoVisual color="#fff">{valor}</TextoVisual>
+            <TextoVisual color="#d00000">HP</TextoVisual>
+            <TextoVisual color="#d00000">{valor}</TextoVisual>
         </VisualHPContainer>
     )
 }
