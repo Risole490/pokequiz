@@ -77,7 +77,6 @@ const Quiz = () => {
         } else if (timer === 0) { // Se o timer for igual a 0, então para o intervalo
             clearInterval(interval);
         }
-        console.log('LINHA 69');
         return () => clearInterval(interval); // Função que será executada toda vez que o componente for desmontado
     }, [isStarted, timer]); // Dependências que farão o useEffect ser executado
 
