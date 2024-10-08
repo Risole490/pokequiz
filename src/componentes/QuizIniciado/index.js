@@ -13,7 +13,6 @@ const QuizElementos = styled.div`
     background-color: rgba(0, 0, 20, 0.6);
     border-radius: 10px;
     width: 100%;
-    height: 100%;
     align-items: center;
     padding: 10px 0px;
     justify-content: ${props => props.justify || "center"};

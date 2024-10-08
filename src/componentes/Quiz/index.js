@@ -291,8 +291,8 @@ const Quiz = () => {
                     {quizData.tipo === 'pokemon' && <p style={{fontSize: '2rem'}}>{quizData.isShiny && '✨'}</p>}
                     {quizData.tipo === 'geral' && quizData.foto && 
                     <ImagemQuiz
-                        width={"250px"}
-                        height={"500px"}
+                        width={"100%"}
+                        height={"100%"}
                         src={quizData.foto} 
                         alt="Pergunta Geral" 
                     />}

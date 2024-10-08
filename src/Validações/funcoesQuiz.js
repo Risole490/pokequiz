@@ -15,7 +15,7 @@ export function resetQuiz() {
 export async function loadNextQuestion() {
     await authenticate(); // Ensure the user is authenticated before accessing Firestore
 
-    const isPokemonQuestion = Math.random() < 0.5; // 50% de chance de ser uma pergunta de Pokémon
+    const isPokemonQuestion = Math.random() < 0.01; // 50% de chance de ser uma pergunta de Pokémon
     // Buscar perguntas gerais do Firestore
     const perguntasGeraisSnapshot = await getDocs(collection(db, 'perguntasGerais'));
     const perguntasGerais = perguntasGeraisSnapshot.docs.map(doc => doc.data());
