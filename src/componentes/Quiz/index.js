@@ -83,7 +83,6 @@ const Quiz = () => {
 // Função para carregar a próxima pergunta
     useEffect(() => {
         if (isStarted && timer === 0) {
-            console.log('LINHA 75');
             const fetchQuestion = async () => {
                 const nextQuestion = await loadNextQuestion();
                 setQuizData(nextQuestion);
@@ -145,7 +144,7 @@ const Quiz = () => {
         setRankingAtualizado(false);
         setSelectedAnswer(null);
         setIsAnswerCorrect(false);
-        setTempoTotal(305);
+        setTempoTotal(125);
         setIsStarted(true);
         setTimer(5);
         setAlternativasDesabilitadas(false); // Habilita os botões de alternativas
@@ -193,8 +192,7 @@ const Quiz = () => {
 
         const nomeExiste = ranking.some(item => item.nome === nome);
 
-        if (nomeExiste) {
-            console.log('Nome já existe no ranking');
+        if (nomeExiste || rankingAtualizado) {
             return;
         }
 
@@ -206,6 +204,7 @@ const Quiz = () => {
                 },
                 body: JSON.stringify({ nome, pontuacao }),
             });
+            setRankingAtualizado(true);
             console.log('Ranking atualizado com sucesso');
             if (!response.ok) {
                 throw new Error('Erro ao atualizar o ranking');
@@ -213,19 +212,22 @@ const Quiz = () => {
         } catch (error) {
             console.error('Erro ao atualizar o ranking:', error);
         }
-    }, [fetchRanking]);
+    }, [fetchRanking, rankingAtualizado]);
 
 // Função para finalizar o quiz    
     const handleFinishQuiz = useCallback(async () => {
-        console.log('Entrou na função handleFinishQuiz LINHA 184');
         if (!rankingAtualizado) {
             await updateRanking(nome, pontuacao);
             setRankingAtualizado(true);
             const ranking = await fetchRanking();
             setRanking(ranking);
             setQuizTerminado(true);
+            return;
         } else {
             setQuizTerminado(true);
+            const ranking = await fetchRanking();
+            setRanking(ranking);
+            return;
         }
     },  [fetchRanking, nome, pontuacao, rankingAtualizado, updateRanking]);
 
@@ -249,7 +251,7 @@ const Quiz = () => {
         } else if (tempoTotal === 0 && !quizTerminado) {
             clearInterval(interval);
             setIsStarted(false);
-            console.log('Chamando handleFinishQuiz LINHA 200');
+            setQuizTerminado(true);
             handleFinishQuiz();
         }
         return () => clearInterval(interval);
@@ -329,7 +331,7 @@ const Quiz = () => {
                     <Subtitulo
                         negrito="bold"
                         cor="#fff"
-                        fundo="#2b2d42"
+                        gradiente="linear-gradient(90deg, rgba(30,53,255,1) 0%, rgba(76,32,255,1) 75%, rgba(255,88,88,1) 100%);"
                         padding="10px"
                         borderRadius="5px"
                     >Sua pontuação: {pontuacao}</Subtitulo>

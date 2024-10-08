@@ -23,10 +23,10 @@ const RankingItem = styled.li`
     align-items: center;
     width: 100%;
     padding: 10px;
-    background-color: #2b2d42;
+    background: linear-gradient(90deg, rgba(30,53,255,1) 0%, rgba(57,57,235,1) 39%, rgba(255,88,88,1) 100%);
     border-radius: 10px;
     font-weight: bold;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Saira', sans-serif;
     color: #fff;
 `
 
