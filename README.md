@@ -1,3 +1,18 @@
+# Pokequiz!
+
+Esse projeto foi feito para a comunidade *GO Sampa* e apresentado no evento *PokéCon* 2024!
+
+## Funcionalidades
+- Interação com o quiz e sistema de pontuação + ranking;
+- Timer e sistema de HP para finalizar o quiz;
+- Responsividade aplicada para dispositivos móveis;
+
+### _Este projeto não terá mais atualizações._
+
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
